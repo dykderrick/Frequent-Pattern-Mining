@@ -9,10 +9,11 @@ import csv
 import operator
 
 
-def get_transactions_db_from_dataset(csv_file_path):
+def get_transactions_db_from_dataset(csv_file_path, data_length=9835):
     """
-    Get data from csv file. And redirect names to indices for less computing in the algorithm.
+    Get data from csv file with a specific length. And redirect names to indices for less computing in the algorithm.
     :param csv_file_path: string
+    :param data_length: int. no more than 9835.
     :return: name2index, index2name, transactions
     """
     transactions_strings = []
@@ -25,7 +26,12 @@ def get_transactions_db_from_dataset(csv_file_path):
         for row in reader:
             transactions_strings.append(row[1][1:-1])  # 1:-1 to delete bracket in the file
 
-    transactions_strings = transactions_strings[1:]  # delete 0-th string (title)
+    a = transactions_strings[-1]
+    # Throw an Exception if data_length excesses.
+    if data_length > len(transactions_strings) - 1:
+        raise Exception("OVERFLOW")
+
+    transactions_strings = transactions_strings[1:data_length + 1]  # delete 0-th string (title)
     transactions_data = [transaction_string.split(",") for transaction_string in transactions_strings]
 
     for transaction in transactions_data:

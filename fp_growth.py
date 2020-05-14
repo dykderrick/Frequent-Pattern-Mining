@@ -252,16 +252,19 @@ def post_process_frequent_itemsets(frequent_itemsets, index2name):
     return final_results
 
 
-def main(min_sup=100):
+def main(min_sup=100, data_length=9835, is_save_results=True):
     """
     Driver to the program.
     """
+
     # get data and use the index for computing
-    name2index, index2name, transactions = get_transactions_db_from_dataset("./dataset/Groceries.csv")
+    name2index, index2name, transactions = get_transactions_db_from_dataset(csv_file_path="./dataset/Groceries.csv",
+                                                                            data_length=data_length)
 
     # run
     frequent_itemsets = FPTree(transactions, min_sup).mine_frequent_itemsets()
     final_results = post_process_frequent_itemsets(frequent_itemsets, index2name)
 
     # save result to a csv file
-    save_frequent_itemsets_to_file(final_results, "./results/fp_growth_results.csv")
+    if is_save_results:
+        save_frequent_itemsets_to_file(final_results, "./results/fp_growth_results.csv")

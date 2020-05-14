@@ -151,12 +151,14 @@ def post_process_frequent_itemsets(frequent_itemsets, index2name):
     return final_results_dict
 
 
-def main(min_sup=100):
+def main(min_sup=100, data_length=9835, is_save_results=True):
     """
     Driver to the program.
     """
+
     # get data and use the index for computing
-    name2index, index2name, transactions = get_transactions_db_from_dataset("./dataset/Groceries.csv")
+    name2index, index2name, transactions = get_transactions_db_from_dataset(csv_file_path="./dataset/Groceries.csv",
+                                                                            data_length=data_length)
 
     # run
     frequent_itemsets = apriori_algorithm(transactions, min_sup)
@@ -168,4 +170,5 @@ def main(min_sup=100):
     sorted_final_results_dict = {k: v for k, v in sorted(final_results_dict.items(), key=lambda item: item[1], reverse=True)}
 
     # save result to a csv file
-    save_frequent_itemsets_to_file(sorted_final_results_dict, "./results/apriori_results.csv")
+    if is_save_results:
+        save_frequent_itemsets_to_file(sorted_final_results_dict, "./results/apriori_results.csv")
